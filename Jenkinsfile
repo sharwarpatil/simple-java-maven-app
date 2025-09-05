@@ -23,14 +23,17 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') { 
+     stage('Deliver') { 
     steps {
         script {
-            try {
-                bat 'jenkins/scripts/deliver.bat'
-            } catch (Exception e) {
-                currentBuild.result = 'FAILURE'
-                error("Delivery failed: ${e.getMessage()}")
+            echo "Current directory: ${pwd()}"
+            bat 'dir jenkins\\scripts'  // Verify script exists
+            bat 'type jenkins\\scripts\\deliver.bat'  // Show script contents
+            
+            // Run with error capture
+            def result = bat(script: 'jenkins\\scripts\\deliver.bat', returnStatus: true)
+            if (result != 0) {
+                error("Delivery script failed with exit code: ${result}")
             }
         }
     }
@@ -38,6 +41,7 @@ pipeline {
     }
      
 }
+
 
 
 
