@@ -24,13 +24,21 @@ pipeline {
             }
         }
         stage('Deliver') { 
-            steps {
-                 bat 'jenkins/scripts/deliver.bat'
+    steps {
+        script {
+            try {
+                bat 'jenkins/scripts/deliver.bat'
+            } catch (Exception e) {
+                currentBuild.result = 'FAILURE'
+                error("Delivery failed: ${e.getMessage()}")
             }
         }
     }
+}
+    }
      
 }
+
 
 
 
