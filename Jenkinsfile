@@ -23,24 +23,21 @@ pipeline {
                 }
             }
         }
-     stage('Deliver') { 
+   stage('Deliver') { 
     steps {
         script {
-            echo "Current directory: ${pwd()}"
-            bat 'dir jenkins\\scripts'  // Verify script exists
-            bat 'type jenkins\\scripts\\deliver.bat'  // Show script contents
+            // First check what's in the .sh file
+            bat 'type jenkins\\scripts\\deliver.sh'
             
-            // Run with error capture
-            def result = bat(script: 'jenkins\\scripts\\deliver.bat', returnStatus: true)
-            if (result != 0) {
-                error("Delivery script failed with exit code: ${result}")
-            }
+            // Then create or call the appropriate script
+            bat 'jenkins\\scripts\\deliver.bat'  // after you create it
         }
     }
 }
     }
      
 }
+
 
 
 
