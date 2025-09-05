@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    options {
+        skipStagesAfterUnstable()
+    }
     tools {
         maven 'Maven3'   // This name must match what you configured
     }
@@ -21,7 +23,13 @@ pipeline {
                 }
             }
         }
+        stage('Deliver') { 
+            steps {
+                sh './jenkins/scripts/deliver.sh' 
+            }
+        }
     }
      
 }
+
 
